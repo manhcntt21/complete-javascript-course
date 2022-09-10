@@ -103,7 +103,7 @@ for (let i = 0; i < bills.length; i++) {
 console.log(tips, totals);
 
 // bonus
-calcAverage = (arr) => {
+const calcAverage = (arr) => {
   let sum = 0;
   for (let i = 0; i < arr.length; i++) {
     sum += arr[i];
@@ -111,4 +111,4 @@ calcAverage = (arr) => {
   return sum / arr.length;
 };
 
-console.log(`Average of bills are: ${calcAverage(totals)}`);
+console.log(`Average of totals are: ${calcAverage(totals)}`);
