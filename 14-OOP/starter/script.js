@@ -89,3 +89,36 @@ console.log(arr.unique());
 
 console.log(Array.prototype.__proto__ === Object.prototype); // true
 console.log(Array.__proto__ === Object.prototype); // false
+
+// 213 ES6 classes
+// class expression
+// const PersonCl = class {};
+
+// class declaration
+// uu tien cai nay hon
+class PersonCl {
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+
+  // method will be added to .prototype property
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`Hey, ${this.firstName}`);
+  }
+}
+
+const jessica = new PersonCl('Jessica', 1996);
+
+console.log(jessica);
+console.log(PersonCl.prototype === jessica.__proto__);
+
+// PersonCl.prototype.greet = function () {
+//   console.log(`Hey, ${this.firstName}`);
+// };
+
+jessica.greet();
