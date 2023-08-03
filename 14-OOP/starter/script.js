@@ -29,6 +29,13 @@ const jay = 'Jay';
 console.log(manh instanceof Person);
 console.log(jay instanceof Person);
 
+Person.hey = function () {
+  console.log('Hey there!');
+};
+
+Person.hey();
+
+// jonas.hey(); // errorr
 // 209: Prototypes
 console.log(Person.prototype);
 
@@ -102,6 +109,7 @@ class PersonCl {
     this.birthYear = birthYear;
   }
 
+  // instance method
   // method will be added to .prototype property
   calcAge() {
     console.log(2037 - this.birthYear);
@@ -109,6 +117,11 @@ class PersonCl {
 
   greet() {
     console.log(`Hey, ${this.firstName}`);
+  }
+
+  // static method
+  static hey() {
+    console.log('Hey there!');
   }
 }
 
@@ -122,3 +135,5 @@ console.log(PersonCl.prototype === jessica.__proto__);
 // };
 
 jessica.greet();
+
+PersonCl.hey();
