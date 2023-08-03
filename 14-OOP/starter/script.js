@@ -137,3 +137,35 @@ console.log(PersonCl.prototype === jessica.__proto__);
 jessica.greet();
 
 PersonCl.hey();
+
+// 216 Object.create
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steven = Object.create(PersonProto);
+
+console.log(steven);
+
+steven.name = 'Steven';
+steven.birthYear = 2002;
+
+steven.calcAge();
+
+console.log(steven.__proto__);
+console.log(steven.__proto__ === PersonProto); //true
+
+const sarah = Object.create(PersonProto);
+
+// khong ke thua thuoc tinh va method khi tao o instance
+// nen voi moi thuoc tinh phai thao tac lai
+console.log(sarah);
+sarah.init('Sarah', 2000);
+sarah.calcAge();
