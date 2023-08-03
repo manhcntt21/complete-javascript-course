@@ -169,3 +169,44 @@ const sarah = Object.create(PersonProto);
 console.log(sarah);
 sarah.init('Sarah', 2000);
 sarah.calcAge();
+
+// 218
+const Person2 = function (firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+};
+
+Person2.prototype.calcAge = function () {
+  console.log(2037 - this.birthYear);
+};
+
+const Student2 = function (firstName, birthYear, course) {
+  Person2.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+// link prototypes
+Student2.prototype = Object.create(Person2.prototype);
+
+Student2.prototype.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+const mike = new Student2('Mike', 2000, 'Computer Science');
+console.log(mike);
+mike.introduce();
+
+mike.calcAge();
+
+console.log(mike.__proto__); // introduce
+console.log(mike.__proto__.__proto__); // Person2.prototype
+
+console.log(mike instanceof Student2);
+console.log(mike instanceof Person2);
+console.log(mike instanceof Object);
+
+console.dir(Student2.prototype.constructor);
+Student2.prototype.constructor = Student2;
+console.dir(Student2.prototype.constructor);
+
+console.dir(mike);
