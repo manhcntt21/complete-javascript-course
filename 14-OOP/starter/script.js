@@ -261,37 +261,47 @@ jay2.calcAge();
 
 // 222 Another Class Example
 class Account {
+  // 1 public field
+  locale = navigator.language;
+
+  // 2 private field
+  // true encapsulation
+  #movements = [];
+  #pin;
   constructor(owner, currency, pin) {
     this.owner = owner;
     this.currency = currency;
     // fake encapsulation
-    this._pin = pin;
+    this.#pin = pin;
+
     // fake encapsulation
-    this._movements = [];
-    this.locale = navigator.language;
+    // this._movements = [];
+    // this.locale = navigator.language;
 
     console.log(`Thanks for opening account, ${this.owner}`);
   }
+  // 3 public method
   // puclic interface - a API
   getMovements() {
-    return this._movements;
+    return this.#movements;
   }
   deposit(val) {
-    this._movements.push(val);
+    this.#movements.push(val);
   }
 
   withdraw(val) {
     this.deposit(-val);
   }
-  _approveLoan(val) {
-    return true;
-  }
 
   requestLoan(val) {
-    if (this._approveLoan(val)) {
+    if (this.#approveLoan(val)) {
       this.deposit(val);
       console.log('Loan approved');
     }
+  }
+  // 4 private method
+  #approveLoan(val) {
+    return true;
   }
 }
 
@@ -302,7 +312,10 @@ const acc1 = new Account('Jonas', 'EUR', 11111);
 acc1.deposit(250);
 acc1.withdraw(140);
 acc1.requestLoan(1000);
+// acc1.#approveLoan(1000);
 
 console.log(acc1.getMovements());
 console.log(acc1);
-console.log(acc1.pin);
+
+// console.log(acc1.#pin);
+// console.log(acc1.#movements);
