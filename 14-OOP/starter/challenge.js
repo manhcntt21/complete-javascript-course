@@ -32,10 +32,12 @@ class CarCl {
 
   accelerate() {
     this.speed += 10;
+    return this;
   }
 
   brake() {
     this.speed -= 5;
+    return this;
   }
 
   get speedUS() {
@@ -84,3 +86,38 @@ evCar.brake();
 evCar.chargeBattery(90);
 
 evCar.accelerate();
+
+// challenge #4
+
+class EVCl extends CarCl {
+  #charge;
+
+  constructor(make, speed, charge) {
+    super(make, speed);
+    this.#charge = charge;
+  }
+  accelerate() {
+    this.speed += 20;
+    this.#charge -= 1;
+    console.log(
+      `${this.make} going at ${this.speed} km/h with a charge ${this.#charge}`
+    );
+    return this;
+  }
+  chargeBattery(chargeTo) {
+    this.#charge = chargeTo;
+    return this;
+  }
+}
+
+const rivian = new EVCl('Rivian', 120, 23);
+rivian
+  .accelerate()
+  .accelerate()
+  .accelerate()
+  .brake()
+  .accelerate()
+  .chargeBattery(50)
+  .accelerate();
+
+console.log(rivian.speedUS);
