@@ -210,3 +210,33 @@ Student2.prototype.constructor = Student2;
 console.dir(Student2.prototype.constructor);
 
 console.dir(mike);
+
+// 220: inheritance between "Classese": ES6
+class StudentCl extends PersonCl {
+  constructor(fullName, birthYear, course) {
+    // always need to happen first
+    super(fullName, birthYear);
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(`My name is ${this.fullName} and I study ${this.course}`);
+  }
+
+  calcAge() {
+    console.log(
+      `I'm ${
+        2037 - this.birthYear
+      } years old, but as a student i feel more like ${
+        2037 - this.birthYear + 10
+      }`
+    );
+  }
+}
+
+// const martha = new StudentCl('Martha Jone', 2012);
+const martha = new StudentCl('Martha Jone', 2012, 'Computer Science');
+
+martha.introduce();
+
+martha.calcAge();
