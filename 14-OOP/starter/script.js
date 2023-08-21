@@ -240,3 +240,21 @@ const martha = new StudentCl('Martha Jone', 2012, 'Computer Science');
 martha.introduce();
 
 martha.calcAge();
+
+// 221: inheritance betwwen "Classes" with Object.create
+const StudentProto = Object.create(PersonProto);
+
+StudentProto.init = function (firstName, birthYear, course) {
+  PersonProto.init.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+StudentProto.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+const jay2 = Object.create(StudentProto);
+
+jay2.init('Jay', 2010, 'Computer Science');
+jay2.introduce();
+jay2.calcAge();
