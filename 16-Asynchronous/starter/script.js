@@ -14,27 +14,64 @@
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
+const getJSON = function (url, errorMsg = 'Something went wrong') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(errorMsg);
+    return response.json();
+  });
+};
+
+// const getCountryData = function (country) {
+//   // country 1
+//   fetch(`https://restcountries.com/v3.1/name/${country}`)
+//     .then(response => {
+//       console.log(response);
+//       if (!response.ok) throw new Error(`Country not found`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       renderCountry(data[0]);
+//       //   const neighbour = data[0].borders?.[0];
+//       const neighbour = 'asdasd';
+
+//       if (!neighbour) return;
+
+//       // country 2
+//       // return promises, vi then can return promises
+//       return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
+//     })
+//     .then(response => {
+//       console.log(response);
+//       if (!response.ok) throw new Error(`Country not found`);
+//       return response.json();
+//     })
+//     .then(data => renderCountry(data[0], 'neighbour'))
+//     .catch(e => {
+//       console.error(e);
+//       renderError(`Something went wrong: ${e.message}, try again`);
+//     })
+//     .finally(() => {
+//       countriesContainer.style.opacity = 1;
+//     });
+// };
+
+// toi uu code tren
 const getCountryData = function (country) {
   // country 1
-  fetch(`https://restcountries.com/v3.1/name/${country}`)
-    .then(
-      response => response.json()
-      //   ,err => alert(err)
-    )
+  getJSON(`https://restcountries.com/v3.1/name/${country}`, 'Country not found')
     .then(data => {
       renderCountry(data[0]);
       const neighbour = data[0].borders?.[0];
-
-      if (!neighbour) return;
+      //   console.log(neighbour);
+      if (!neighbour) throw new Error('No neighbour found!');
 
       // country 2
       // return promises, vi then can return promises
-      return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
+      return getJSON(
+        `https://restcountries.com/v3.1/alpha/${neighbour}`,
+        'Country not found'
+      );
     })
-    .then(
-      response => response.json()
-      //   ,err => alert(err)
-    )
     .then(data => renderCountry(data[0], 'neighbour'))
     .catch(e => {
       console.error(e);
@@ -204,4 +241,4 @@ btn.addEventListener('click', function (e) {
   getCountryData('portugal');
 });
 
-getCountryData('asdasds');
+getCountryData('australia');
