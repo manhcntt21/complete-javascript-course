@@ -17,15 +17,9 @@ const countriesContainer = document.querySelector('.countries');
 ///////////////////////////////////////
 
 // old school way of AJAX call - XMLHttpRequest
-const getCountriesData = function (country) {
-  const request = new XMLHttpRequest();
-  request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
-  request.send();
-  request.addEventListener('load', function () {
-    const [data] = JSON.parse(this.responseText);
-    console.log(data.languages);
-    const html = `
-            <article class="country">
+const renderCountry = function (data, className = '') {
+  const html = `
+            <article class="country ${className}">
               <img class="country__img" src="${data.flags.svg}" />
               <div class="country__data">
                 <h3 class="country__name">${data.name.common}</h3>
@@ -41,12 +35,53 @@ const getCountriesData = function (country) {
             </article>  
       `;
 
-    countriesContainer.insertAdjacentHTML('beforeend', html);
-    countriesContainer.style.opacity = 1;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+const getCountryAndNeighbour = function (country) {
+  // AJAX call country 1
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
+  request.send();
+  request.addEventListener('load', function () {
+    const [data] = JSON.parse(this.responseText);
+    console.log(data);
+    renderCountry(data);
+
+    // get neighbour country
+    const [neighbour] = data.borders;
+    // console.log(neighbour);
+
+    if (!neighbour) return;
+
+    // AJAX call country 2
+    const request2 = new XMLHttpRequest();
+    request2.open('GET', `https://restcountries.com/v3.1/alpha/${neighbour}`);
+    request2.send();
+
+    request2.addEventListener('load', function () {
+      const [data2] = JSON.parse(this.responseText);
+      console.log(data2);
+
+      renderCountry(data2, 'neighbour');
+    });
   });
 };
 
 // AJAX call => asynchronous
-getCountriesData('portugal');
-getCountriesData('usa');
-getCountriesData('germany');
+// getCountryAndNeighbour('portugal');
+getCountryAndNeighbour('usa');
+// getCountryAndNeighbour('germany');
+
+setTimeout(() => {
+  console.log('1 second passed!');
+  setTimeout(() => {
+    console.log('2 second passed!');
+    setTimeout(() => {
+      console.log('3 second passed!');
+      setTimeout(() => {
+        console.log('4 second passed!');
+      }, 100);
+    }, 100);
+  }, 100);
+}, 100);
