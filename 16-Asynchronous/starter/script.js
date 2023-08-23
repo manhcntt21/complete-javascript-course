@@ -14,6 +14,41 @@
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
+const getCountryData = function (country) {
+  // country 1
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(
+      response => response.json()
+      //   ,err => alert(err)
+    )
+    .then(data => {
+      renderCountry(data[0]);
+      const neighbour = data[0].borders?.[0];
+
+      if (!neighbour) return;
+
+      // country 2
+      // return promises, vi then can return promises
+      return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
+    })
+    .then(
+      response => response.json()
+      //   ,err => alert(err)
+    )
+    .then(data => renderCountry(data[0], 'neighbour'))
+    .catch(e => {
+      console.error(e);
+      renderError(`Something went wrong: ${e.message}, try again`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
+};
+
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  //   countriesContainer.style.opacity = 1;
+};
 ///////////////////////////////////////
 
 // // old school way of AJAX call - XMLHttpRequest
@@ -36,7 +71,7 @@ const renderCountry = function (data, className = '') {
       `;
 
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
+  //   countriesContainer.style.opacity = 1;
 };
 // const getCountryAndNeighbour = function (country) {
 //   // AJAX call country 1
@@ -116,23 +151,32 @@ const renderCountry = function (data, className = '') {
 // };
 
 // arrow function
-const getCountryData = function (country) {
-  // country 1
-  fetch(`https://restcountries.com/v3.1/name/${country}`)
-    .then(response => response.json())
-    .then(data => {
-      renderCountry(data[0]);
-      const neighbour = data[0].borders?.[0];
+// const getCountryData = function (country) {
+//   // country 1
+//   fetch(`https://restcountries.com/v3.1/name/${country}`)
+//     .then(
+//       response => response.json()
+//       //   ,err => alert(err)
+//     )
+//     .then(data => {
+//       renderCountry(data[0]);
+//       const neighbour = data[0].borders?.[0];
 
-      if (!neighbour) return;
+//       if (!neighbour) return;
 
-      // country 2
-      // return promises, vi then can return promises
-      return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
-    })
-    .then(response => response.json())
-    .then(data => renderCountry(data[0], 'neighbour'));
-};
+//       // country 2
+//       // return promises, vi then can return promises
+//       return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
+//     })
+//     .then(
+//       response => response.json()
+//       //   ,err => alert(err)
+//     )
+//     .then(data => renderCountry(data[0], 'neighbour'))
+//     .catch(e => {
+//       console.log(e);
+//     });
+// };
 
 /*
 cach nay van work, nhung nen trach, vi no su dung nested callback function
@@ -156,4 +200,8 @@ cach nay van work, nhung nen trach, vi no su dung nested callback function
 //     .then(data => renderCountry(data[0], 'neighbour'));
 // };
 
-getCountryData('portugal');
+btn.addEventListener('click', function (e) {
+  getCountryData('portugal');
+});
+
+getCountryData('asdasds');
