@@ -241,4 +241,23 @@ btn.addEventListener('click', function (e) {
   getCountryData('portugal');
 });
 
-getCountryData('australia');
+// getCountryData('australia');
+
+/////////////////////////////////////////////
+// Event loop in practive
+
+// synchronous
+console.log('Test start'); // 1 global execution context
+
+// sau 0s, callback function duoc dua vao callback queue
+setTimeout(() => console.log('0 sec timer'), 0); // 3 callback queue
+
+// promises resolve - fulfilled
+Promise.resolve('Resolve promises 1').then(res => console.log(res)); // 2 microtasks queue
+
+Promise.resolve('Resolve promises 2').then(res => {
+  for (let i = 0; i < 10000000; i++) {}
+  console.log(res);
+});
+// synchronous
+console.log('Test end'); // 1 global execution context
