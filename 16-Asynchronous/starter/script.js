@@ -246,18 +246,72 @@ btn.addEventListener('click', function (e) {
 /////////////////////////////////////////////
 // Event loop in practive
 
-// synchronous
-console.log('Test start'); // 1 global execution context
+// // synchronous
+// console.log('Test start'); // 1 global execution context
 
-// sau 0s, callback function duoc dua vao callback queue
-setTimeout(() => console.log('0 sec timer'), 0); // 3 callback queue
+// // sau 0s, callback function duoc dua vao callback queue
+// setTimeout(() => console.log('0 sec timer'), 0); // 3 callback queue
 
-// promises resolve - fulfilled
-Promise.resolve('Resolve promises 1').then(res => console.log(res)); // 2 microtasks queue
+// // promises resolve - fulfilled
+// Promise.resolve('Resolve promises 1').then(res => console.log(res)); // 2 microtasks queue
 
-Promise.resolve('Resolve promises 2').then(res => {
-  for (let i = 0; i < 10000000; i++) {}
-  console.log(res);
+// Promise.resolve('Resolve promises 2').then(res => {
+//   for (let i = 0; i < 10000000; i++) {}
+//   console.log(res);
+// });
+// // synchronous
+// console.log('Test end'); // 1 global execution context
+
+////////////////////////////////////////////////
+// building a simple promiese
+// new promise using promise constructor
+// asynchronous behavior
+const lotteryPromise = new Promise(function (resolve, reject) {
+  console.log('Lotter draw is happening');
+  // dung timer encapsulate any asynchronous behavior into a promise
+  // de mo phong asynchronous operation
+  setTimeout(() => {
+    if (Math.random() >= 0.5) {
+      // fulfilled promise
+      resolve('You win!');
+    } else {
+      // rejected promise
+      reject(new Error('You lost your money!'));
+    }
+  }, 2000);
 });
-// synchronous
-console.log('Test end'); // 1 global execution context
+
+// consuming promise
+lotteryPromise.then(res => console.log(res)).catch(e => console.error(e));
+
+// promisifing setTimeout:
+// warp old callback based function into promise
+const wait = function (seconds) {
+  // chi can 1 tham so vi setTimeout khong bao gio fail
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+// consum
+wait(1)
+  .then(() => {
+    console.log('1 second passed');
+    return wait(2);
+  })
+  .then(() => {
+    console.log('2 second passed');
+    return wait(3);
+  })
+  .then(() => {
+    console.log('3 second passed');
+    return wait(4);
+  })
+  .then(() => {
+    console.log('4 second passed');
+    return wait(5);
+  });
+
+// static method on promise constructor
+Promise.resolve('abc').then(x => console.log(x));
+Promise.reject(new Error('Problem!')).catch(x => console.error(x));
