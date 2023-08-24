@@ -264,54 +264,74 @@ btn.addEventListener('click', function (e) {
 
 ////////////////////////////////////////////////
 // building a simple promiese
-// new promise using promise constructor
-// asynchronous behavior
-const lotteryPromise = new Promise(function (resolve, reject) {
-  console.log('Lotter draw is happening');
-  // dung timer encapsulate any asynchronous behavior into a promise
-  // de mo phong asynchronous operation
-  setTimeout(() => {
-    if (Math.random() >= 0.5) {
-      // fulfilled promise
-      resolve('You win!');
-    } else {
-      // rejected promise
-      reject(new Error('You lost your money!'));
-    }
-  }, 2000);
-});
+// // new promise using promise constructor
+// // asynchronous behavior
+// const lotteryPromise = new Promise(function (resolve, reject) {
+//   console.log('Lotter draw is happening');
+//   // dung timer encapsulate any asynchronous behavior into a promise
+//   // de mo phong asynchronous operation
+//   setTimeout(() => {
+//     if (Math.random() >= 0.5) {
+//       // fulfilled promise
+//       resolve('You win!');
+//     } else {
+//       // rejected promise
+//       reject(new Error('You lost your money!'));
+//     }
+//   }, 2000);
+// });
 
-// consuming promise
-lotteryPromise.then(res => console.log(res)).catch(e => console.error(e));
+// // consuming promise
+// lotteryPromise.then(res => console.log(res)).catch(e => console.error(e));
 
-// promisifing setTimeout:
-// warp old callback based function into promise
-const wait = function (seconds) {
-  // chi can 1 tham so vi setTimeout khong bao gio fail
-  return new Promise(function (resolve) {
-    setTimeout(resolve, seconds * 1000);
+// // promisifing setTimeout:
+// // warp old callback based function into promise
+// const wait = function (seconds) {
+//   // chi can 1 tham so vi setTimeout khong bao gio fail
+//   return new Promise(function (resolve) {
+//     setTimeout(resolve, seconds * 1000);
+//   });
+// };
+
+// // consum
+// wait(1)
+//   .then(() => {
+//     console.log('1 second passed');
+//     return wait(2);
+//   })
+//   .then(() => {
+//     console.log('2 second passed');
+//     return wait(3);
+//   })
+//   .then(() => {
+//     console.log('3 second passed');
+//     return wait(4);
+//   })
+//   .then(() => {
+//     console.log('4 second passed');
+//     return wait(5);
+//   });
+
+// // static method on promise constructor
+// Promise.resolve('abc').then(x => console.log(x));
+// Promise.reject(new Error('Problem!')).catch(x => console.error(x));
+
+////////////////////////////////////////
+// Promisifying the Geolocation API
+
+console.log('Getting position!');
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => resolve(position),
+    //   err => reject(err)
+    // );
+
+    navigator.geolocation.getCurrentPosition(resolve, reject);
   });
 };
 
-// consum
-wait(1)
-  .then(() => {
-    console.log('1 second passed');
-    return wait(2);
-  })
-  .then(() => {
-    console.log('2 second passed');
-    return wait(3);
-  })
-  .then(() => {
-    console.log('3 second passed');
-    return wait(4);
-  })
-  .then(() => {
-    console.log('4 second passed');
-    return wait(5);
-  });
-
-// static method on promise constructor
-Promise.resolve('abc').then(x => console.log(x));
-Promise.reject(new Error('Problem!')).catch(x => console.error(x));
+getPosition()
+  .then(res => console.log(res))
+  .catch(err => new Error(err));
