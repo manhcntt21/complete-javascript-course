@@ -108,7 +108,7 @@ const renderCountry = function (data, className = '') {
       `;
 
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  //   countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
 };
 // const getCountryAndNeighbour = function (country) {
 //   // AJAX call country 1
@@ -319,6 +319,25 @@ btn.addEventListener('click', function (e) {
 ////////////////////////////////////////
 // Promisifying the Geolocation API
 
+// console.log('Getting position!');
+
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     // navigator.geolocation.getCurrentPosition(
+//     //   position => resolve(position),
+//     //   err => reject(err)
+//     // );
+
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
+
+// getPosition()
+//   .then(res => console.log(res))
+//   .catch(err => new Error(err));
+
+////////////////////////////////////////
+// Consuming Promises with Async/Await
 console.log('Getting position!');
 
 const getPosition = function () {
@@ -335,3 +354,26 @@ const getPosition = function () {
 getPosition()
   .then(res => console.log(res))
   .catch(err => new Error(err));
+
+const whereAmI = async function () {
+  const pos = await getPosition();
+  const { latitude: lat, longitude: lng } = pos.coords;
+  // reverse geocoding
+  const resGeo = await fetch(
+    `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+  );
+  const dataGeo = await resGeo.json();
+  console.log(dataGeo);
+  // country
+  // no se doi cho den khi promise o trang thai fulfilled
+  const res = await fetch(
+    `https://restcountries.com/v3.1/name/${dataGeo?.address?.country.toLowerCase()}`
+  );
+
+  const data = await res.json();
+
+  console.log(data[0]);
+  renderCountry(data[0]);
+};
+whereAmI();
+console.log('FIRST');
