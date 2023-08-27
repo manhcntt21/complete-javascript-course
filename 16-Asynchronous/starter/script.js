@@ -393,8 +393,42 @@ btn.addEventListener('click', function (e) {
 //   alert(error.message);
 // }
 ////
-try {
-  const whereAmI = async function () {
+// try {
+//   const whereAmI = async function () {
+//     const pos = await getPosition();
+//     const { latitude: lat, longitude: lng } = pos.coords;
+//     // reverse geocoding
+//     const resGeo = await fetch(
+//       `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+//     );
+//     if (!resGeo.ok) throw Error(`Problem with geocoding ${resGeo.status}`);
+//     const dataGeo = await resGeo.json();
+//     console.log(dataGeo);
+//     // country
+//     // no se doi cho den khi promise o trang thai fulfilled
+//     const res = await fetch(
+//       `https://restcountries.com/v3.1/name/${dataGeo?.address?.country.toLowerCase()}`
+//     );
+//     if (!res.ok) throw Error(`Problem with geocoding ${res.status}`);
+//     const data = await res.json();
+//     console.log(data[0]);
+//     renderCountry(data[0]);
+//   };
+// } catch (error) {
+//   console.error(error);
+//   renderError(`Something went wrong`);
+// }
+
+////////////////////////////////////////
+// return value from async function
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmI = async function () {
+  try {
     const pos = await getPosition();
     const { latitude: lat, longitude: lng } = pos.coords;
     // reverse geocoding
@@ -403,18 +437,43 @@ try {
     );
     if (!resGeo.ok) throw Error(`Problem with geocoding ${resGeo.status}`);
     const dataGeo = await resGeo.json();
-    console.log(dataGeo);
+    // console.log(dataGeo);
     // country
     // no se doi cho den khi promise o trang thai fulfilled
     const res = await fetch(
-      `https://restcountries.com/v3.1/name/${dataGeo?.address?.country.toLowerCase()}`
+      `https://restcountries.com/v3.1/name/${dataGeo?.address?.country?.toLowerCase()}`
     );
     if (!res.ok) throw Error(`Problem with geocoding ${res.status}`);
     const data = await res.json();
-    console.log(data[0]);
+    // console.log(data[0]);
     renderCountry(data[0]);
-  };
-} catch (error) {
-  console.error(error);
-  renderError(`Something went wrong`);
-}
+    return `You're in ${dataGeo?.address?.city}, ${dataGeo?.address?.country}`;
+  } catch (error) {
+    console.error(error);
+    renderError(`Something went wrong`);
+
+    // reject promise returned from async function
+    //
+    throw error;
+  }
+};
+
+// mixed giua viec su dung old va new voi promise
+console.log('1: Will get location!');
+// whereAmI()
+//   .then(city => console.log(`2: ${city}`))
+//   .catch(error => console.error(`2: ${error.message}`))
+//   .finally(() => {
+//     console.log('3: Finished getting location!');
+//   });
+
+// chi su dung new promise, su them them iife: immediately-invoked function expression
+(async function () {
+  try {
+    const city = await whereAmI();
+    console.log(`2: ${city}`);
+  } catch (error) {
+    console.error(`2: ${error.message}`);
+  }
+  console.log('3: Finished getting location!');
+})();
