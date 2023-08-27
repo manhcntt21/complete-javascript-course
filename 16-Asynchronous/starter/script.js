@@ -477,3 +477,28 @@ console.log('1: Will get location!');
   }
   console.log('3: Finished getting location!');
 })();
+
+/////////////////////////////////////
+// running promises parallel
+const getThreeCountries = async function (c1, c2, c3) {
+  try {
+    // 3 ajax call khong phu thuoc vao nhau
+    // const [data1] = await getJSON(`https://restcountries.com/v3.1/name/${c1}`);
+    // const [data2] = await getJSON(`https://restcountries.com/v3.1/name/${c2}`);
+    // const [data3] = await getJSON(`https://restcountries.com/v3.1/name/${c3}`);
+    // const [data] = data1.capital;
+    // console.log(data);
+    // console.log(data1.capital, data2.capital, data3.capital);
+
+    const data = await Promise.all([
+      getJSON(`https://restcountries.com/v3.1/name/${c1}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c2}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c3}`),
+    ]);
+    console.log(data.map(d => d[0].capital));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+getThreeCountries('portugal', 'vietnam', 'germany');
