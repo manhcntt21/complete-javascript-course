@@ -98,65 +98,65 @@ whereAmI('https://nominatim.openstreetmap.org/reverse');
 /**
  * fix my first solution
  */
-const imgContainer = document.querySelector('.images');
-let curImg;
-const createImage = function (src) {
-  return new Promise(function (resolve, reject) {
-    const imgEl = document.createElement('img');
-    imgEl.src = src;
-    if (imgEl.src) return resolve(imgEl);
-    return reject(new Error('fail upload'));
-  });
-};
+// const imgContainer = document.querySelector('.images');
+// let curImg;
+// const createImage = function (src) {
+//   return new Promise(function (resolve, reject) {
+//     const imgEl = document.createElement('img');
+//     imgEl.src = src;
+//     if (imgEl.src) return resolve(imgEl);
+//     return reject(new Error('fail upload'));
+//   });
+// };
 
-const wait = function (seconds) {
-  // chi can 1 tham so vi setTimeout khong bao gio fail
-  return new Promise(function (resolve) {
-    setTimeout(resolve, seconds * 1000);
-  });
-};
+// const wait = function (seconds) {
+//   // chi can 1 tham so vi setTimeout khong bao gio fail
+//   return new Promise(function (resolve) {
+//     setTimeout(resolve, seconds * 1000);
+//   });
+// };
 
-createImage('./img/img-1.jpg')
-  .then(img => {
-    curImg = img;
-    imgContainer.insertAdjacentElement('beforeend', img);
-    return wait(2);
-  })
-  .then(() => {
-    curImg.style.display = 'none';
-    return createImage('./img/img-2.jpg');
-  })
-  .then(img => {
-    curImg = img;
-    imgContainer.insertAdjacentElement('beforeend', img);
-    return wait(2);
-  })
-  .then(() => {
-    curImg.style.display = 'none';
-    return createImage('./img/img-3.jpg');
-  })
-  .then(img => {
-    imgContainer.insertAdjacentElement('beforeend', img);
-  })
-  .catch(e => console.error(e));
+// createImage('./img/img-1.jpg')
+//   .then(img => {
+//     curImg = img;
+//     imgContainer.insertAdjacentElement('beforeend', img);
+//     return wait(2);
+//   })
+//   .then(() => {
+//     curImg.style.display = 'none';
+//     return createImage('./img/img-2.jpg');
+//   })
+//   .then(img => {
+//     curImg = img;
+//     imgContainer.insertAdjacentElement('beforeend', img);
+//     return wait(2);
+//   })
+//   .then(() => {
+//     curImg.style.display = 'none';
+//     return createImage('./img/img-3.jpg');
+//   })
+//   .then(img => {
+//     imgContainer.insertAdjacentElement('beforeend', img);
+//   })
+//   .catch(e => console.error(e));
 
 /**
  *
  * loi giai khi tham giao solution */
 
-// const imgContainer = document.querySelector('.images');
+const imgContainer = document.querySelector('.images');
 
-// const createImage = function (src) {
-//   return new Promise(function (resolve, reject) {
-//     const imgEl = document.createElement('img');
-//     imgEl.src = src;
-//     if (imgEl.src !== '') {
-//       imgContainer.append(imgEl);
-//       return resolve(imgEl);
-//     }
-//     return reject(new Error('fail upload'));
-//   });
-// };
+const createImage = function (src) {
+  return new Promise(function (resolve, reject) {
+    const imgEl = document.createElement('img');
+    imgEl.src = src;
+    if (imgEl.src !== '') {
+      imgContainer.append(imgEl);
+      return resolve(imgEl);
+    }
+    return reject(new Error('fail upload'));
+  });
+};
 
 // const wait = function (seconds) {
 //   // chi can 1 tham so vi setTimeout khong bao gio fail
@@ -187,3 +187,53 @@ createImage('./img/img-1.jpg')
 //     return createImage('./img/img-3.jpg');
 //   })
 //   .catch(e => console.error(e));
+
+// challenge #3
+// part 1
+const wait = function (seconds) {
+  // chi can 1 tham so vi setTimeout khong bao gio fail
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+const loadNPause = async function (image1, image2, image3) {
+  try {
+    let img = await createImage(image1);
+    await wait(3);
+    img.style.display = 'none';
+    img = await createImage(image2);
+    await wait(3);
+    img.style.display = 'none';
+    await createImage(image3);
+  } catch (error) {
+    throw error;
+  }
+};
+
+// loadNPause('./img/img-1.jpg', './img/img-2.jpg', './img/img-3.jpg')
+//   .then(res => console.log(res))
+//   .catch(e => console.error(e));
+
+// part 2
+const loadAll = async function (arr) {
+  try {
+    const imgs = arr.map(async img => await createImage(img));
+    // const imgs = arr.map(img => createImage(img));
+    console.log(imgs);
+
+    const imgsEl = await Promise.all(imgs);
+
+    console.log(imgsEl);
+    imgsEl.forEach(e => e.classList.add('parallel'));
+  } catch (error) {
+    throw error;
+  }
+};
+loadAll(['./img/img-1.jpg', './img/img-2.jpg', './img/img-3.jpg']);
+
+// Promise.race([
+//   createImage('./img/img-2.jpg'),
+//   createImage('./img/img-1.jpg'),
+//   createImage('./img/img-3.jpg'),
+// ]).then(res => console.log(res));
