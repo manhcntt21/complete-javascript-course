@@ -459,7 +459,7 @@ const whereAmI = async function () {
 };
 
 // mixed giua viec su dung old va new voi promise
-console.log('1: Will get location!');
+// console.log('1: Will get location!');
 // whereAmI()
 //   .then(city => console.log(`2: ${city}`))
 //   .catch(error => console.error(`2: ${error.message}`))
@@ -468,37 +468,95 @@ console.log('1: Will get location!');
 //   });
 
 // chi su dung new promise, su them them iife: immediately-invoked function expression
-(async function () {
-  try {
-    const city = await whereAmI();
-    console.log(`2: ${city}`);
-  } catch (error) {
-    console.error(`2: ${error.message}`);
-  }
-  console.log('3: Finished getting location!');
-})();
+// (async function () {
+//   try {
+//     const city = await whereAmI();
+//     console.log(`2: ${city}`);
+//   } catch (error) {
+//     console.error(`2: ${error.message}`);
+//   }
+//   console.log('3: Finished getting location!');
+// })();
 
 /////////////////////////////////////
 // running promises parallel
-const getThreeCountries = async function (c1, c2, c3) {
-  try {
-    // 3 ajax call khong phu thuoc vao nhau
-    // const [data1] = await getJSON(`https://restcountries.com/v3.1/name/${c1}`);
-    // const [data2] = await getJSON(`https://restcountries.com/v3.1/name/${c2}`);
-    // const [data3] = await getJSON(`https://restcountries.com/v3.1/name/${c3}`);
-    // const [data] = data1.capital;
-    // console.log(data);
-    // console.log(data1.capital, data2.capital, data3.capital);
+// const getThreeCountries = async function (c1, c2, c3) {
+//   try {
+//     // 3 ajax call khong phu thuoc vao nhau
+//     // const [data1] = await getJSON(`https://restcountries.com/v3.1/name/${c1}`);
+//     // const [data2] = await getJSON(`https://restcountries.com/v3.1/name/${c2}`);
+//     // const [data3] = await getJSON(`https://restcountries.com/v3.1/name/${c3}`);
+//     // const [data] = data1.capital;
+//     // console.log(data);
+//     // console.log(data1.capital, data2.capital, data3.capital);
 
-    const data = await Promise.all([
-      getJSON(`https://restcountries.com/v3.1/name/${c1}`),
-      getJSON(`https://restcountries.com/v3.1/name/${c2}`),
-      getJSON(`https://restcountries.com/v3.1/name/${c3}`),
-    ]);
-    console.log(data.map(d => d[0].capital));
-  } catch (error) {
-    console.error(error);
-  }
+//     const data = await Promise.all([
+//       getJSON(`https://restcountries.com/v3.1/name/${c1}`),
+//       getJSON(`https://restcountries.com/v3.1/name/${c2}`),
+//       getJSON(`https://restcountries.com/v3.1/name/${c3}`),
+//     ]);
+//     console.log(data.map(d => d[0].capital));
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+// getThreeCountries('portugal', 'vietnam', 'germany');
+
+//////////////////////////////
+// Promise.race
+// tra ve 1 cai nhanh nhat
+(async function () {
+  const res = await Promise.race([
+    getJSON(`https://restcountries.com/v3.1/name/italy`),
+    getJSON(`https://restcountries.com/v3.1/name/egypt`),
+    getJSON(`https://restcountries.com/v3.1/name/mexico`),
+  ]);
+  // console.log(res[0]);
+})();
+
+const timeout = function (sec) {
+  return new Promise(function (_, reject) {
+    setTimeout(() => {
+      reject(new Error('Reuqest too long'));
+    }, sec * 1000);
+  });
 };
 
-getThreeCountries('portugal', 'vietnam', 'germany');
+// 3 vs 0.1
+Promise.race([
+  getJSON(`https://restcountries.com/v3.1/name/mexico`),
+  timeout(0.1),
+])
+  .then(res => console.log(res[0]))
+  .catch(e => console.error(e));
+
+// promise.allSettled
+Promise.allSettled([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('Another success'),
+])
+  .then(res => console.log(res))
+  .catch(e => console.error(e));
+
+Promise.all([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('Another success'),
+])
+  .then(res => console.log(res))
+  .catch(e => console.error(e));
+
+// Promise.any
+Promise.any([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('Another success'),
+])
+  .then(res => console.log(res))
+  .catch(e => console.error(e));
+
+Promise.any([Promise.reject('Error')])
+  .then(res => console.log(res))
+  .catch(e => console.error(e));
