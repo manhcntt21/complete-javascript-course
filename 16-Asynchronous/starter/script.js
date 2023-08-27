@@ -337,43 +337,84 @@ btn.addEventListener('click', function (e) {
 //   .catch(err => new Error(err));
 
 ////////////////////////////////////////
-// Consuming Promises with Async/Await
-console.log('Getting position!');
+// // Consuming Promises with Async/Await
+// console.log('Getting position!');
 
-const getPosition = function () {
-  return new Promise(function (resolve, reject) {
-    // navigator.geolocation.getCurrentPosition(
-    //   position => resolve(position),
-    //   err => reject(err)
-    // );
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     // navigator.geolocation.getCurrentPosition(
+//     //   position => resolve(position),
+//     //   err => reject(err)
+//     // );
 
-    navigator.geolocation.getCurrentPosition(resolve, reject);
-  });
-};
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
 
-getPosition()
-  .then(res => console.log(res))
-  .catch(err => new Error(err));
+// getPosition()
+//   .then(res => console.log(res))
+//   .catch(err => new Error(err));
 
-const whereAmI = async function () {
-  const pos = await getPosition();
-  const { latitude: lat, longitude: lng } = pos.coords;
-  // reverse geocoding
-  const resGeo = await fetch(
-    `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
-  );
-  const dataGeo = await resGeo.json();
-  console.log(dataGeo);
-  // country
-  // no se doi cho den khi promise o trang thai fulfilled
-  const res = await fetch(
-    `https://restcountries.com/v3.1/name/${dataGeo?.address?.country.toLowerCase()}`
-  );
+// const whereAmI = async function () {
+//   const pos = await getPosition();
+//   const { latitude: lat, longitude: lng } = pos.coords;
+//   // reverse geocoding
+//   const resGeo = await fetch(
+//     `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+//   );
+//   const dataGeo = await resGeo.json();
+//   console.log(dataGeo);
+//   // country
+//   // no se doi cho den khi promise o trang thai fulfilled
+//   const res = await fetch(
+//     `https://restcountries.com/v3.1/name/${dataGeo?.address?.country.toLowerCase()}`
+//   );
 
-  const data = await res.json();
+//   const data = await res.json();
 
-  console.log(data[0]);
-  renderCountry(data[0]);
-};
-whereAmI();
-console.log('FIRST');
+//   console.log(data[0]);
+//   renderCountry(data[0]);
+// };
+// whereAmI();
+// console.log('FIRST');
+
+////////////////////////////////////////
+// error handling with try/catch
+// let y = 1;
+// const x = 2;
+// x = 3;
+
+// try {
+//   let y = 1;
+//   const x = 2;
+//   // x = 3;
+//   y = 3;
+// } catch (error) {
+//   alert(error.message);
+// }
+////
+try {
+  const whereAmI = async function () {
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
+    // reverse geocoding
+    const resGeo = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+    );
+    if (!resGeo.ok) throw Error(`Problem with geocoding ${resGeo.status}`);
+    const dataGeo = await resGeo.json();
+    console.log(dataGeo);
+    // country
+    // no se doi cho den khi promise o trang thai fulfilled
+    const res = await fetch(
+      `https://restcountries.com/v3.1/name/${dataGeo?.address?.country.toLowerCase()}`
+    );
+    if (!res.ok) throw Error(`Problem with geocoding ${res.status}`);
+    const data = await res.json();
+    console.log(data[0]);
+    renderCountry(data[0]);
+  };
+} catch (error) {
+  console.error(error);
+  renderError(`Something went wrong`);
+}
