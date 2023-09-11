@@ -79,3 +79,16 @@
 // ShoppingCart2.addToCart('pizza', 2);
 // console.log(ShoppingCart2);
 // console.log(ShoppingCart2.shippingCost); // underfine
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+// doan nay khong work on brower nhung work on nodejs
+// // export
+// export.addToCart = function (product, quantity) {
+//     cart.push(product);
+//     console.log(
+//       `${quantity} ${product} added to cart (shhipping cost is ${shippingCost})`
+//     );
+//   };
+// // import
+// const { addToCart } = require('./shoppingCart.js')
