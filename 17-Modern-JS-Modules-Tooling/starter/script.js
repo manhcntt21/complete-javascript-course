@@ -48,3 +48,34 @@
 // // user top level await
 // const lastPost2 = await getLastPost();
 // console.log(lastPost2);
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+// dung iife de no chi thuc thi mot lan, neu no thuc thi nhieu lan, cac gia tri se bi reset
+// duoi day dang ap dung closure
+// cac function trong van truy cap dc gia tri cua ham ben ngoai, mac du no da thuc thi xong
+// const ShoppingCart2 = (function () {
+//   const cart = [];
+//   const shippingCost = 10;
+//   const totalPrice = 237;
+//   const totalQuantity = 23;
+//   const addToCart = function (product, quantity) {
+//     cart.push(product);
+//     console.log(
+//       `${quantity} ${product} added to cart (shhipping cost is ${shippingCost})`
+//     );
+//   };
+
+//   const orderStock = function (product, quantity) {
+//     cart.push(product);
+//     console.log(`${quantity} ${product} ordered from cart`);
+//   };
+
+//   return { addToCart, cart, totalPrice, totalQuantity };
+// })();
+
+// // closure, giup addtocart van truy cap dc gia tri cua card
+// ShoppingCart2.addToCart('apple', 4);
+// ShoppingCart2.addToCart('pizza', 2);
+// console.log(ShoppingCart2);
+// console.log(ShoppingCart2.shippingCost); // underfine
