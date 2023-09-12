@@ -14,14 +14,14 @@
 // console.log(ShoppingCart.tq);
 
 // gan tren cho default export
-// import add, { cart } from './shoppingCart.js';
-// console.log('Importing module');
+import add, { cart } from './shoppingCart.js';
+console.log('Importing module');
 
-// add('pizza', 2);
-// add('pizza', 5);
-// add('pizza', 4);
+add('pizza', 2);
+add('pizza', 5);
+add('pizza', 4);
 
-// console.log(cart);
+console.log(cart);
 
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
@@ -95,22 +95,26 @@
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
-// import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+// import cloneDeep from 'lodash-es';
+// import cloneDeep from 'lodash';
 
-// const state = {
-//   cart: [
-//     { product: 'bread', quantity: 5 },
-//     { product: 'bread', quantity: 5 },
-//     { product: 'bread', quantity: 5 },
-//   ],
-//   user: { loggedIn: true },
-// };
+const state = {
+  cart: [
+    { product: 'bread', quantity: 5 },
+    { product: 'bread', quantity: 5 },
+    { product: 'bread', quantity: 5 },
+  ],
+  user: { loggedIn: true },
+};
 
-// // cope object
-// const stateClone = Object.assign({}, state);
-// const stateDeeoClone = cloneDeep(state);
-// state.user.loggedIn = false;
-// console.log(stateClone);
+// cope object
+const stateClone = Object.assign({}, state);
+const stateDeeoClone = cloneDeep(state);
+state.user.loggedIn = false;
+console.log(stateClone);
 
-// // lodash copy
-// console.log(stateDeeoClone);
+// lodash copy
+console.log(stateDeeoClone);
+
+// // ngan can reload page moi khi thay doi
