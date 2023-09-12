@@ -1,3 +1,4 @@
+import 'core-js/actual';
 // Importing module
 // import { addToCart, totalPrice as price, tq } from './shoppingCart.js';
 // // console.log(shippingCost); // error
@@ -118,3 +119,14 @@ console.log(stateClone);
 console.log(stateDeeoClone);
 
 // // ngan can reload page moi khi thay doi
+
+class Person {
+  greeting = 'Hey';
+
+  constructor(name) {
+    this.name = name;
+    console.log(`${this.greeting},  ${this.name}`);
+  }
+}
+
+const joans = Person('jonas');

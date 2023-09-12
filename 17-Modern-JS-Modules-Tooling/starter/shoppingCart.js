@@ -1,3 +1,4 @@
+import 'core-js/actual';
 // Exporting module
 console.log('Exporting module');
 
